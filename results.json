@@ -1,0 +1,133 @@
+{
+  "correct": 10,
+  "cases": [
+    {
+      "case": 1,
+      "expected": [
+        [
+          "mutable-default",
+          1
+        ]
+      ],
+      "actual": [
+        [
+          "mutable-default",
+          1
+        ]
+      ],
+      "exact_match": true
+    },
+    {
+      "case": 2,
+      "expected": [],
+      "actual": [],
+      "exact_match": true
+    },
+    {
+      "case": 3,
+      "expected": [
+        [
+          "bare-except",
+          3
+        ]
+      ],
+      "actual": [
+        [
+          "bare-except",
+          3
+        ]
+      ],
+      "exact_match": true
+    },
+    {
+      "case": 4,
+      "expected": [
+        [
+          "silent-except",
+          4
+        ]
+      ],
+      "actual": [
+        [
+          "silent-except",
+          4
+        ]
+      ],
+      "exact_match": true
+    },
+    {
+      "case": 5,
+      "expected": [],
+      "actual": [],
+      "exact_match": true
+    },
+    {
+      "case": 6,
+      "expected": [],
+      "actual": [],
+      "exact_match": true
+    },
+    {
+      "case": 7,
+      "expected": [
+        [
+          "syntax",
+          1
+        ]
+      ],
+      "actual": [
+        [
+          "syntax",
+          1
+        ]
+      ],
+      "exact_match": true
+    },
+    {
+      "case": 8,
+      "expected": [
+        [
+          "mutable-default",
+          1
+        ]
+      ],
+      "actual": [
+        [
+          "mutable-default",
+          1
+        ]
+      ],
+      "exact_match": true
+    },
+    {
+      "case": 9,
+      "expected": [
+        [
+          "bare-except",
+          3
+        ],
+        [
+          "silent-except",
+          4
+        ]
+      ],
+      "actual": [
+        [
+          "bare-except",
+          3
+        ],
+        [
+          "silent-except",
+          4
+        ]
+      ],
+      "exact_match": true
+    },
+    {
+      "case": 10,
+      "expected": [],
+      "actual": [],
+      "exact_match": true
+    }
+  ]
+}
