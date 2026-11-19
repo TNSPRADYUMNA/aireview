@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './style.css'
 
-type Finding = { id:string; line:number; title:string; evidence:string; suggestion:string; confidence:string }
+type Finding = { id:string; line:number; title:string; evidence:string; suggestion:string; confidence:string; rationale?:string }
 type Feedback = { finding_id:string; decision:string; correction:string }
 type Report = { id:string; changed_lines:number; findings:Finding[]; feedback?:Feedback[] }
 
@@ -21,6 +21,7 @@ function App() {
   const [message,setMessage] = useState('')
   const [busy,setBusy] = useState(false)
   const [draft,setDraft] = useState('')
+  const [useLLM,setUseLLM] = useState(false)
   function load(data:Report) {
     setReport(data)
     setDraft('')
@@ -34,7 +35,7 @@ function App() {
   async function analyze(event:React.FormEvent) {
     event.preventDefault(); setBusy(true); setMessage('')
     try {
-      const data = await request<Report>('/api/review', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({before,after})})
+      const data = await request<Report>('/api/review', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({before,after,use_llm:useLLM})})
       load(data)
       history.replaceState(null,'','?review=' + data.id)
     } catch(error) { setMessage(String(error)) }
@@ -54,7 +55,8 @@ function App() {
     <form onSubmit={analyze}><div className="editors">
       <label>Before<textarea value={before} onChange={e=>setBefore(e.target.value)} /></label>
       <label>After<textarea value={after} onChange={e=>setAfter(e.target.value)} /></label>
-    </div><button disabled={busy}>{busy ? 'Reviewing…' : 'Review changes'}</button></form>
+    </div><label><input type="checkbox" checked={useLLM} onChange={e=>setUseLLM(e.target.checked)} /> Send both code versions to the configured LLM for additional findings</label>
+    <button disabled={busy}>{busy ? 'Reviewing…' : 'Review changes'}</button></form>
     <p role="status">{message}</p>
     {report && <section><h2>{report.findings.length} findings <span>· {report.changed_lines} changed lines</span></h2>
       {report.findings.length > 0 && <button onClick={() => request<{draft:string}>('/api/review/' + report.id + '/draft', {method:'POST'})
@@ -62,6 +64,7 @@ function App() {
       {draft && <p>{draft}</p>}
       {report.findings.map(f=><details key={f.id}><summary><strong>{f.title}</strong><span>Line {f.line} · {f.confidence}</span></summary>
         <pre>{f.evidence}</pre><p>{f.suggestion}</p>
+        {f.rationale && <p>{f.rationale}</p>}
         <label>Correction<textarea value={notes[f.id] ?? ''} placeholder="Describe a better finding" onChange={e=>setNotes(old=>({...old,[f.id]:e.target.value}))}/></label>
         <div className="actions"><button onClick={()=>save(f.id,'accepted')}>Accept</button><button onClick={()=>save(f.id,'rejected')}>Reject</button>
         <button disabled={!notes[f.id]?.trim()} onClick={()=>save(f.id,'corrected')}>Save correction</button>

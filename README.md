@@ -15,4 +15,6 @@ Open `http://127.0.0.1:8040`. Configure PostgreSQL with `DATABASE_URL=postgresql
 
 ## Verification
 
+The review form can now request additional model findings. It sends the two code versions only when the checkbox is enabled. Each returned finding must reference a changed line, and the server extracts the evidence directly from that version. Model findings carry an unverified label, rationale, and the same accept/reject/correct controls as rule findings. The label is a provenance indicator, with no calibrated probability attached. Mocked provider tests reject unchanged and nonexistent line references. Live model accuracy and human usability remain unmeasured.
+
 The deterministic analyzer matched **10 of 10** expected rule/line sets from curated positive and negative fixtures, including pre-existing issues, syntax errors, mutable defaults and exception handlers. The API test verifies correction validation and persisted feedback. The confidence labels distinguish direct syntax patterns from suggestions requiring judgment. The fixture does not measure broad reviewer agreement, LLM quality, or production PostgreSQL reliability. [Results](results.json)
